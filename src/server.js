@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { dbConnect } from "./configs/dbConnect.js";
 import authRoutes from "./routes/authRoutes.js";
+import "./configs/passportConfig.js";
 
 dotenv.config();
 dbConnect();
