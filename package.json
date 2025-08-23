@@ -4,11 +4,11 @@
   "description": "Backend for the finance app",
   "license": "ISC",
   "author": "Allwyn",
-  "type": "commonjs",
-  "main": "server.js",
+  "type": "module",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon src/server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
