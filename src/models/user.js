@@ -1,4 +1,4 @@
-import { supabase } from "../supabaseClient.js";
+import { supabase } from "../configs/dbConnect.js";
 
 class UserModel {
   static table = "users";

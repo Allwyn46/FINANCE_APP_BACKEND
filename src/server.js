@@ -3,7 +3,8 @@ import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
 import cors from "cors";
-import dbConnect from "./configs/dbConnect.js";
+import { dbConnect } from "./configs/dbConnect.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 dbConnect();
@@ -34,7 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ROUTES
-
+app.use("/api/auth", authRoutes);
 // APP LISTEN
 const port = process.env.APP_PORT || 7001;
 app.listen(port, () => {

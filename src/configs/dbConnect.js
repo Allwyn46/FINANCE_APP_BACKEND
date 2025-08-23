@@ -1,20 +1,24 @@
 import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const supabaseUrl = "https://ejhmsuwymejibjeeffab.supabase.co";
+const supabaseKey = process.env.SUPABASE_KEY;
+
+// Create a single global client
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const dbConnect = () => {
   try {
-    const supabaseUrl = "https://ejhmsuwymejibjeeffab.supabase.co";
-    const supabaseKey = process.env.SUPABASE_KEY;
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
     if (supabase) {
-      console.log("Database conected");
+      console.log("✅ Database connected");
     } else {
-      console.log("Database Not connected");
+      console.log("❌ Database not connected");
     }
   } catch (error) {
-    console.log(`Database connection error ${error}`);
+    console.log(`Database connection error: ${error}`);
   }
 };
 
-export default dbConnect;
+export { dbConnect, supabase };
