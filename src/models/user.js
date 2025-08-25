@@ -37,7 +37,7 @@ class UserModel {
       .from(this.table)
       .select("*")
       .eq("username", username)
-      .single();
+      .maybeSingle();
 
     if (error) throw new Error(error.message);
     return data;

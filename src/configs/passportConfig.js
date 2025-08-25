@@ -2,12 +2,11 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.js";
-import { supabase } from "./dbConnect.js";
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = UserModel.findByUsername({ username });
+      const user = await UserModel.findByUsername(username);
 
       if (!user) {
         return done(null, false, {
@@ -32,8 +31,11 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = UserModel.findById(id);
-  } catch (error) {}
+    const user = await UserModel.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
 });
