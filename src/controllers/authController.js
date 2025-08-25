@@ -30,8 +30,27 @@ export const login = async (req, res) => {
     ismfaactive: req.user.ismfaactive,
   });
 };
-export const authStatus = () => {};
-export const logout = () => {};
+export const authStatus = async (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      message: "Logged in succesffully",
+      user: req.user.username,
+      ismfaactive: req.user.ismfaactive,
+    });
+  } else {
+    res.status(401).json({
+      message: "UnAuthorized User",
+    });
+  }
+};
+export const logout = async (req, res) => {
+  if (!req.user) res.status(400).json({ message: "UnAuthorized User" });
+
+  req.logout((err) => {
+    if (err) return res.status(400).json({ message: "User not logged in" });
+    res.status(200).json({ message: "Logged Out Successfully" });
+  });
+};
 export const setupTwofa = () => {};
 export const verifyTwofa = () => {};
 export const resetTwofa = () => {};
