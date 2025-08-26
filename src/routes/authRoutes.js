@@ -27,12 +27,39 @@ router.post("/logout", logout);
 // ===== 2FA ===== //
 
 //SETUP ROUTE
-router.post("/2fa/setup", setupTwofa);
+router.post(
+  "/2fa/setup",
+  (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(400).json({
+      message: "unauthorized user",
+    });
+  },
+  setupTwofa,
+);
 
 // LOGIN ROUTE
-router.post("/2fa/verify", verifyTwofa);
+router.post(
+  "/2fa/verify",
+  (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(400).json({
+      message: "unauthorized user",
+    });
+  },
+  verifyTwofa,
+);
 
 //AUTH STATUS ROUTE
-router.post("/2fa/reset", resetTwofa);
+router.post(
+  "/2fa/reset",
+  (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    res.status(400).json({
+      message: "unauthorized user",
+    });
+  },
+  resetTwofa,
+);
 
 export default router;

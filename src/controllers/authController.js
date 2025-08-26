@@ -1,5 +1,8 @@
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.js";
+import speakeasy from "speakeasy";
+import qrCode from "qrcode";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
@@ -30,6 +33,7 @@ export const login = async (req, res) => {
     ismfaactive: req.user.ismfaactive,
   });
 };
+
 export const authStatus = async (req, res) => {
   if (req.user) {
     res.status(200).json({
@@ -43,6 +47,7 @@ export const authStatus = async (req, res) => {
     });
   }
 };
+
 export const logout = async (req, res) => {
   if (!req.user) res.status(400).json({ message: "UnAuthorized User" });
 
@@ -51,6 +56,18 @@ export const logout = async (req, res) => {
     res.status(200).json({ message: "Logged Out Successfully" });
   });
 };
-export const setupTwofa = () => {};
+
+export const setupTwofa = async (req, res) => {
+  const user = req.user;
+  let secret = speakeasy.generateSecret();
+  console.log("Generated Secret:", secret);
+
+  await UserModel.update(user.id, {
+    twofactorsecret: secret.base32,
+    ismfaactive: true,
+  });
+
+  user.twofactorsecret = secret.base32;
+};
 export const verifyTwofa = () => {};
 export const resetTwofa = () => {};
