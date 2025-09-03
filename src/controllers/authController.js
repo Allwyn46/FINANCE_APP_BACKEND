@@ -67,7 +67,19 @@ export const setupTwofa = async (req, res) => {
     ismfaactive: true,
   });
 
-  user.twofactorsecret = secret.base32;
+  const url = speakeasy.otpauthURL({
+    secret: secret.base32,
+    label: `${req.user.username}`,
+    issuer: "craftwell.com",
+    encoding: "base32",
+  });
+  const qrimageurl = await qrCode.toDataURL(url);
+
+  res.status(200).json({
+    message: "MFA Setup Successfully",
+    secret: secret.base32,
+    qrcode: qrimageurl,
+  });
 };
 export const verifyTwofa = () => {};
 export const resetTwofa = () => {};
