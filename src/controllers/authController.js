@@ -60,7 +60,6 @@ export const logout = async (req, res) => {
 export const setupTwofa = async (req, res) => {
   const user = req.user;
   let secret = speakeasy.generateSecret();
-  console.log("Generated Secret:", secret);
 
   await UserModel.update(user.id, {
     twofactorsecret: secret.base32,
