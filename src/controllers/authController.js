@@ -81,5 +81,53 @@ export const setupTwofa = async (req, res) => {
     qrcode: qrimageurl,
   });
 };
-export const verifyTwofa = () => {};
-export const resetTwofa = () => {};
+
+export const verifyTwofa = async (req, res) => {
+  const { token } = req.body;
+  const user = req.user;
+
+  const verified = speakeasy.totp({
+    secret: user.twofactorsecret,
+    encoding: "base32",
+    token,
+  });
+
+  if (verified) {
+    const jwtToken = jwt.sign(
+      { username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1hr",
+      },
+    );
+
+    res.status(200).json({
+      message: "2FA verified successfully",
+      token: jwtToken,
+    });
+  } else {
+    res.status(400).json({
+      message: "2FA Verification Failed",
+    });
+  }
+};
+
+export const resetTwofa = async (req, res) => {
+  try {
+    const user = req.user;
+
+    await UserModel.update(user.id, {
+      twofactorsecret: "",
+      ismfaactive: false,
+    });
+
+    res.status(200).json({
+      message: "2FA Reset Successfull",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error Resetting 2FA",
+      error: error,
+    });
+  }
+};
